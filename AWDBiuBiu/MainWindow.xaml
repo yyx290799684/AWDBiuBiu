@@ -1,0 +1,132 @@
+﻿<Window x:Class="AWDBiuBiu.MainWindow"
+        Name="window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:AWDBiuBiu.Converter"
+        xmlns:local="clr-namespace:AWDBiuBiu"
+        mc:Ignorable="d"
+        Title="AWDBiuBiu" Height="450" MinWidth="850" Width="850">
+
+    <Window.Resources>
+        <converter:Boolean2VisibilityReConverter x:Key="Boolean2VisibilityReConverter"/>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="URL:"/>
+                <TextBox Name="urlTextBox" Text="http://192.168.{0}.1:{1}" Width="400"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                <TextBlock Text="IP范围:"/>
+                <TextBox Name="ipTextBox" Text="1-100" Width="50"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                <TextBlock Text="端口范围:"/>
+                <TextBox Name="portTextBox" Text="80" Width="50"/>
+            </StackPanel>
+
+            <RadioButton Name="getRadioButton" GroupName="urlRadioButton" Content="GET" Margin="5,2,0,0"/>
+            <RadioButton Name="postRadioButton" GroupName="urlRadioButton" Content="POST" IsChecked="True" Margin="5,2,0,0"/>
+
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="flag正则:"/>
+                <TextBox Name="regTextBox" Text="flag{[a-zA-Z0-9]{32}}" Width="250"/>
+            </StackPanel>
+            <CheckBox Name="threadCheckBox" Content="多线程" Margin="20,2,0,0"/>
+            <Button Name="goButton" Content="Go" Width="50" Margin="10,0,0,0" Click="goButton_Click"/>
+            <Button Name="stopButton" Content="Stop" Width="50" Margin="10,0,0,0" Click="stopButton_Click"/>
+
+            <ProgressBar Name="progressBar" Margin="10,0,0,0" Width="100" Minimum="0"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2" Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Header参数:" />
+            <TextBox Name="headerTextBox" Grid.Column="1" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </Grid>
+
+        <Grid Grid.Row="3" Visibility="{Binding IsChecked, ElementName=postRadioButton,Converter={StaticResource Boolean2VisibilityReConverter}}" Margin="0,5,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="POST参数:" />
+            <TextBox Name="paramTextBox" Grid.Column="1" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+            <TextBox Name="fileparamTextBox" Text="file" Grid.Row="1" Margin="0,2,0,0"/>
+            <Grid Grid.Row="1" Grid.Column="1" Margin="0,2,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Name="selectButton" Content="浏览"  Click="selectButton_Click"/>
+                <TextBox Name="pathTextBox" Grid.Column="1" IsReadOnly="True"/>
+            </Grid>
+        </Grid>
+
+        <Line Grid.Row="4" X1="0" X2="{Binding Width,ElementName=window}" Height="10" Stroke="red" Margin="-5,5"/>
+        <Grid Grid.Row="5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Margin="0,0,5,0">
+                <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="flag提交:"/>
+                        <TextBox Name="flagUrlTextBox" Text="http://www.getflag.com/api" Width="250"/>
+                    </StackPanel>
+                    <RadioButton Name="getflagRadioButton" GroupName="flagRadioButton" Content="GET" Margin="5,2,0,0"/>
+                    <RadioButton Name="postflagRadioButton" GroupName="flagRadioButton" Content="POST" IsChecked="True" Margin="5,2,0,0"/>
+                </StackPanel>
+                <Grid  Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Header参数:" />
+                    <TextBox Name="headerflagTextBox" Grid.Column="1" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </Grid>
+                <Grid  Visibility="{Binding IsChecked, ElementName=postflagRadioButton,Converter={StaticResource Boolean2VisibilityReConverter}}" Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="POST参数:" />
+                    <TextBox Name="paramflagTextBox" Text="flag={0}" Grid.Column="1" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </Grid>
+            </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Text="日志输出"/>
+                <TextBox Name="logTextBox" Grid.Row="1" Margin="0,5,0,0"/>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>
