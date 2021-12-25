@@ -1,6 +1,9 @@
-﻿using AWDBiuBiu.Util;
+﻿using AWDBiuBiu.Converter;
+using AWDBiuBiu.Util;
+using AWDBiuBiu.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -23,19 +26,16 @@ namespace AWDBiuBiu
     public partial class MainWindow : Window
     {
         int attackcount = 0;
+        int requestcount = 0;
+        ObservableCollection<RequestViewModel> requestList = new ObservableCollection<RequestViewModel>();
 
-        string url = string.Empty;
+
         int ipstart = -1;
         int ipend = -1;
         int portstart = -1;
         int portend = -1;
-        string mode = "GET";
         string flagmode = "GET";
         string reg = string.Empty;
-        string filepath = string.Empty;
-        string fileparam = string.Empty;
-        List<KeyValuePair<string, string>> headerList = null;
-        List<KeyValuePair<string, string>> paramList = null;
         string flagurl = string.Empty;
         List<KeyValuePair<string, string>> headerflagList = null;
         List<KeyValuePair<string, string>> paramflagList = null;
@@ -44,57 +44,97 @@ namespace AWDBiuBiu
         public MainWindow()
         {
             InitializeComponent();
+
+            Init();
+
         }
+
+        private void Init()
+        {
+            requestList.Add(new RequestViewModel() { Id = ++requestcount });
+            tab.ItemsSource = requestList;
+        }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            requestList.Add(new RequestViewModel() { Id = ++requestcount });
+            tab.SelectedIndex = requestList.Count - 1;
+        }
+
+        private void delButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (requestList.Count > 1)
+            {
+                requestList.RemoveAt(tab.SelectedIndex);
+            }
+
+        }
+
 
         private void goButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(urlTextBox.Text) || string.IsNullOrEmpty(ipTextBox.Text) || string.IsNullOrEmpty(portTextBox.Text))
+            if (string.IsNullOrEmpty(ipTextBox.Text) || string.IsNullOrEmpty(portTextBox.Text))
             {
                 return;
             }
 
-            if (!GetConfig())
+            if (!GetBaseConfig())
             {
                 return;
             }
+
+            foreach (var item in requestList)
+            {
+                if (!GetConfig(item))
+                {
+                    return;
+                }
+            }
+
+            addButton.IsEnabled = false;
+            delButton.IsEnabled = false;
+            threadCheckBox.IsEnabled = false;
+            threadCheckBox.SetBinding(IsEnabledProperty, new Binding("Items.Count") { ElementName = "tab", Converter = new ThreadEnableConverter() });
             attackcount++;
             // url = "http://124.160.12.17:18890/flag.html";
             DoAttack();
         }
-
         private void stopButton_Click(object sender, RoutedEventArgs e)
         {
             attackcount++;
             progressBar.Value = 0;
+            addButton.IsEnabled = true;
+            delButton.IsEnabled = true;
+            threadCheckBox.IsEnabled = true;
+            threadCheckBox.SetBinding(IsEnabledProperty, new Binding("Items.Count") { ElementName = "tab", Converter = new ThreadEnableConverter() });
         }
 
-        private bool GetConfig()
+
+        private bool GetBaseConfig()
         {
-            url = urlTextBox.Text.Trim();
             reg = regTextBox.Text.Trim();
             flagurl = flagUrlTextBox.Text.Trim();
             var ips = Utils.BuildStartAndEnd(ipTextBox.Text.Trim());
             ipstart = ips.Key;
             ipend = ips.Value;
             isthread = (bool)threadCheckBox.IsChecked;
-            filepath = pathTextBox.Text;
-            fileparam = fileparamTextBox.Text.Trim();
-
             var ports = Utils.BuildStartAndEnd(portTextBox.Text.Trim());
             portstart = ports.Key;
             portend = ports.Value;
-
             if (ipstart == -1 || ipstart > 256 || ipend > 256 || portstart == -1 || portstart > 65535 || portend > 65535)
             {
                 return false;
             }
 
-            mode = (bool)getRadioButton.IsChecked ? "GET" : "POST";
             flagmode = (bool)getflagRadioButton.IsChecked ? "GET" : "POST";
+            return true;
 
-            headerList = Utils.BuildKeyValuePairList(headerTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
-            paramList = Utils.BuildKeyValuePairList(paramTextBox.Text.Trim(), '&', '=');
-            if ((!string.IsNullOrEmpty(headerTextBox.Text) && headerList == null) || (!string.IsNullOrEmpty(paramTextBox.Text) && paramList == null))
+        }
+
+
+        private bool GetConfig(RequestViewModel requestViewModel)
+        {
+            if ((!string.IsNullOrEmpty(requestViewModel.Header) && requestViewModel.HeaderList == null) || (!string.IsNullOrEmpty(requestViewModel.Param) && requestViewModel.ParamList == null))
             {
                 return false;
             }
@@ -107,6 +147,7 @@ namespace AWDBiuBiu
             progressBar.Maximum = ipend - ipstart + 1;
             progressBar.Value = 0;
             logTextBox.Text = string.Empty;
+            logTextBox.Text += DateTime.Now + "\r";
 
 
             for (int ip = ipstart; ip <= ipend; ip++)
@@ -117,26 +158,33 @@ namespace AWDBiuBiu
                     {
                         return;
                     }
-                    string attackurl = string.Format(url, ip, port);
-                    statusTextBlock.Text = mode + " " + attackurl;
-                    if (isthread)
+                    foreach (var item in requestList)
                     {
-                        SendAttack(attackurl);
-                        await Task.Delay(1);
+                        item.Attackurl = string.Format(item.Url, ip, port);
+                        statusTextBlock.Text = item.Mode + " " + item.Attackurl;
+                        if (isthread)
+                        {
+                            SendAttack(item);
+                            await Task.Delay(1);
+                        }
+                        else
+                        {
+                            await SendAttack(item);
+                        }
                     }
-                    else
-                    {
-                        await SendAttack(attackurl);
-                    }
+
 
                 }
                 progressBar.Value++;
             }
+            addButton.IsEnabled = true;
+            delButton.IsEnabled = true;
+            threadCheckBox.IsEnabled = true;
         }
 
-        private async Task SendAttack(string attackurl)
+        private async Task SendAttack(RequestViewModel requestViewModel)
         {
-            var ret = await NetWork.getHttpWebRequest(attackurl, paramList: paramList, headerList: headerList, mode: mode, filePath: filepath, fileParam: fileparam);
+            var ret = await NetWork.getHttpWebRequest(requestViewModel.Attackurl, paramList: requestViewModel.ParamList, headerList: requestViewModel.HeaderList, mode: requestViewModel.Mode, filePath: requestViewModel.Filepath, fileParam: requestViewModel.Fileparam);
             if (!string.IsNullOrEmpty(ret))
             {
                 if (!string.IsNullOrEmpty(reg))
@@ -146,7 +194,7 @@ namespace AWDBiuBiu
                     {
                         SubFlag(flag);
                     }
-                    PutLog(new Uri(attackurl).Host, flag);
+                    PutLog(requestViewModel.Host, flag);
                 }
             }
         }
@@ -168,8 +216,20 @@ namespace AWDBiuBiu
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                pathTextBox.Text = openFileDialog.FileName.ToString();
+                requestList.Where(p => p.Id == (int)(sender as Button).Tag).ToList()[0].Filepath = openFileDialog.FileName.ToString();
             }
+        }
+
+        private void textBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            (sender as TextBox).SelectionStart = (sender as TextBox).Text.Length;
+        }
+
+        private void gitLink_Click(object sender, RoutedEventArgs e)
+        {
+            Hyperlink link = sender as Hyperlink;
+            Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
+
         }
     }
 }
