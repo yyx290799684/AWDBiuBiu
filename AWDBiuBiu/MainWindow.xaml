@@ -20,9 +20,21 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="flag正则:"/>
+                <TextBox Name="regTextBox" Text="flag{[a-zA-Z0-9]{32}}" Width="250"/>
+            </StackPanel>
+            <CheckBox Name="threadCheckBox" Content="多线程" Margin="20,2,0,0"/>
+            <Button Name="goButton" Content="Go" Width="50" Margin="10,0,0,0" Click="goButton_Click"/>
+            <Button Name="stopButton" Content="Stop" Width="50" Margin="10,0,0,0" Click="stopButton_Click"/>
+
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,0">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="URL:"/>
                 <TextBox Name="urlTextBox" Text="http://192.168.{0}.1:{1}" Width="400"/>
@@ -42,17 +54,7 @@
             <RadioButton Name="postRadioButton" GroupName="urlRadioButton" Content="POST" IsChecked="True" Margin="5,2,0,0"/>
 
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,0">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="flag正则:"/>
-                <TextBox Name="regTextBox" Text="flag{[a-zA-Z0-9]{32}}" Width="250"/>
-            </StackPanel>
-            <CheckBox Name="threadCheckBox" Content="多线程" Margin="20,2,0,0"/>
-            <Button Name="goButton" Content="Go" Width="50" Margin="10,0,0,0" Click="goButton_Click"/>
-            <Button Name="stopButton" Content="Stop" Width="50" Margin="10,0,0,0" Click="stopButton_Click"/>
 
-            <ProgressBar Name="progressBar" Margin="10,0,0,0" Width="100" Minimum="0"/>
-        </StackPanel>
 
         <Grid Grid.Row="2" Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
@@ -86,7 +88,7 @@
         </Grid>
 
         <Line Grid.Row="4" X1="0" X2="{Binding Width,ElementName=window}" Height="10" Stroke="red" Margin="-5,5"/>
-        <Grid Grid.Row="5" >
+        <Grid Grid.Row="5" Margin="0,0,0,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -127,6 +129,27 @@
                 <TextBox Name="logTextBox" Grid.Row="1" Margin="0,5,0,0"/>
             </Grid>
         </Grid>
+        <StatusBar Grid.Row="6" Height="25" DockPanel.Dock="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Name="statusTextBlock"  />
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+            <StatusBarItem Grid.Column="2">
+                <ProgressBar Name="progressBar" Height="30" Width="150" Minimum="0"/>
+            </StatusBarItem>
+        </StatusBar>
+
 
     </Grid>
 </Window>

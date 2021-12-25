@@ -118,6 +118,7 @@ namespace AWDBiuBiu
                         return;
                     }
                     string attackurl = string.Format(url, ip, port);
+                    statusTextBlock.Text = mode + " " + attackurl;
                     if (isthread)
                     {
                         SendAttack(attackurl);
