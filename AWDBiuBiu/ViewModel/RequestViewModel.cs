@@ -31,7 +31,7 @@ namespace AWDBiuBiu.ViewModel
 
         public RequestViewModel()
         {
-            Url = "http://192.168.{0}.1:{1}";
+            Url = "http://192.168.{0}.1:{1}/";
             Mode = "POST";
             Fileparam = "file";
         }

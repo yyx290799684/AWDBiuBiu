@@ -57,7 +57,12 @@ namespace AWDBiuBiu
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            requestList.Add(new RequestViewModel() { Id = ++requestcount });
+            requestList.Add(new RequestViewModel()
+            {
+                Id = ++requestcount,
+                Url = (tab.SelectedItem as RequestViewModel).Url,
+                Header = (tab.SelectedItem as RequestViewModel).Header,
+            });
             tab.SelectedIndex = requestList.Count - 1;
         }
 

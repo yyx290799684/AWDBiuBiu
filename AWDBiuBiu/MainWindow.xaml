@@ -153,6 +153,11 @@
                     <TextBlock Text="POST参数:" />
                     <TextBox Name="paramflagTextBox" Text="flag={0}" Grid.Column="1" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
                 </Grid>
+
+                <TextBlock Text="Demo:" Margin="0,10,0,0"/>
+                <TextBlock Text="Header:&#x000D;&#x0009;Accept-Encoding: gzip, deflate&#x000D;&#x0009;Accept-Language: zh-CN,zh;q=0.9&#x000D;&#x0009;Cookie: xx "/>
+                <TextBlock Text="参数:&#x000D;&#x0009;a=1&amp;b=2"/>
+
             </StackPanel>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
