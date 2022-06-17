@@ -104,7 +104,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="POST参数:" />
                             <TextBox Name="paramTextBox" Text="{Binding Param,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Height="50" TextWrapping="Wrap" AcceptsReturn="True"/>
-                            <TextBox Name="fileparamTextBox" Text="{Binding Fileparam,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="0,2,0,0"/>
+                            <TextBox Name="fileparamTextBox" ToolTip="文件参数" Text="{Binding Fileparam,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="0,2,2,0"/>
                             <Grid Grid.Row="1" Grid.Column="1" Margin="0,2,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
@@ -121,7 +121,7 @@
         </TabControl>
 
 
-        <Line Grid.Row="2" X1="0" X2="{Binding Width,ElementName=window}" Height="10" Stroke="red" Margin="-5,5"/>
+        <Line Grid.Row="2" X1="0" X2="{Binding ActualWidth,ElementName=window}" Height="10" Stroke="red" Margin="-5,5"/>
         <Grid Grid.Row="3" Margin="0,0,0,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -132,8 +132,12 @@
                 <StackPanel Orientation="Horizontal" >
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="flag提交:"/>
-                        <TextBox Name="flagUrlTextBox" Text="http://www.getflag.com/api" Width="250" GotFocus="textBox_GotFocus"/>
+                        <TextBox Name="flagUrlTextBox" Text="http://www.getflag.com?flag={}" Width="500" GotFocus="textBox_GotFocus"/>
                     </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Margin="0,5,0,0">
+                    <TextBlock Text="flag提交ID范围(可空):"/>
+                    <TextBox Name="flagIDTextBox" Text="2109-2110" Width="100"/>
                     <RadioButton Name="getflagRadioButton" GroupName="flagRadioButton" Content="GET" Margin="5,2,0,0"/>
                     <RadioButton Name="postflagRadioButton" GroupName="flagRadioButton" Content="POST" IsChecked="True" Margin="5,2,0,0"/>
                 </StackPanel>

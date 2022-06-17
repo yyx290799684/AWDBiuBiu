@@ -161,6 +161,7 @@ namespace AWDBiuBiu
                 {
                     if (oldattackcount != attackcount)
                     {
+                        progressBar.Value = 0;
                         return;
                     }
                     foreach (var item in requestList)
@@ -206,9 +207,29 @@ namespace AWDBiuBiu
 
         private async void SubFlag(string flag)
         {
-            headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
-            paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
-            var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
+            if (string.IsNullOrEmpty(flagIDTextBox.Text))
+            {
+                headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
+                paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
+                var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
+                PutLog(flag, ret);
+            }
+            else
+            {
+                var ids = Utils.BuildStartAndEnd(flagIDTextBox.Text.Trim());
+                var idstart = ids.Key;
+                var ipend = ids.Value;
+
+                for (int id = idstart; id <= ipend; id++)
+                {
+                    headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
+                    paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
+                    var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag, id), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
+                    PutLog(flag, ret);
+                }
+
+            }
+
         }
 
         private void PutLog(string host, string flag)
