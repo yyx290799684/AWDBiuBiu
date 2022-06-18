@@ -1,10 +1,12 @@
 ﻿using AWDBiuBiu.Converter;
 using AWDBiuBiu.Util;
 using AWDBiuBiu.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,8 +53,17 @@ namespace AWDBiuBiu
 
         private void Init()
         {
-            requestList.Add(new RequestViewModel() { Id = ++requestcount });
-            tab.ItemsSource = requestList;
+            if (File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "/default.config"))
+            {
+                string config = File.ReadAllText(System.AppDomain.CurrentDomain.BaseDirectory + "/default.config");
+                ReadConfig(config);
+            }
+            else
+            {
+
+                requestList.Add(new RequestViewModel() { Id = ++requestcount });
+                tab.ItemsSource = requestList;
+            }
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
@@ -149,10 +160,13 @@ namespace AWDBiuBiu
         private async void DoAttack()
         {
             int oldattackcount = attackcount;
-            progressBar.Maximum = ipend - ipstart + 1;
+            progressBar.Maximum = (ipend - ipstart + 1) * (portend - portstart + 1) * requestList.Count;
             progressBar.Value = 0;
             logTextBox.Text = string.Empty;
             logTextBox.Text += DateTime.Now + "\r";
+
+            SaveConfig(BuildConfig(), System.AppDomain.CurrentDomain.BaseDirectory + "/default.config");
+
 
 
             for (int ip = ipstart; ip <= ipend; ip++)
@@ -177,12 +191,18 @@ namespace AWDBiuBiu
                         {
                             await SendAttack(item);
                         }
+                        progressBar.Value++;
                     }
 
 
                 }
-                progressBar.Value++;
             }
+
+
+            var configString = JsonConvert.SerializeObject(requestList);
+            Debug.WriteLine(configString);
+
+
             addButton.IsEnabled = true;
             delButton.IsEnabled = true;
             threadCheckBox.IsEnabled = true;
@@ -198,9 +218,16 @@ namespace AWDBiuBiu
                     string flag = Utils.DoRegex(ret, reg);
                     if (!string.IsNullOrEmpty(flagurl))
                     {
-                        SubFlag(flag);
+                        try
+                        {
+                            SubFlag(flag);
+                            PutLog(requestViewModel.Host, flag);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
-                    PutLog(requestViewModel.Host, flag);
                 }
             }
         }
@@ -255,6 +282,110 @@ namespace AWDBiuBiu
         {
             Hyperlink link = sender as Hyperlink;
             Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
+
+        }
+
+        private string BuildConfig()
+        {
+            if (!GetBaseConfig())
+            {
+                return string.Empty;
+            }
+
+            ConfigModel configModel = new ConfigModel();
+            configModel.flagreg = reg;
+            configModel.iprange = ipTextBox.Text.Trim();
+            configModel.portrange = portTextBox.Text.Trim();
+
+            configModel.requestList = requestList;
+
+            configModel.flagurl = flagurl;
+            configModel.flagidrange = flagIDTextBox.Text.Trim();
+            configModel.flaghttpmode = flagmode;
+            configModel.flagheader = headerflagTextBox.Text.Trim();
+            configModel.flagparam = paramflagTextBox.Text.Trim();
+
+            var configString = JsonConvert.SerializeObject(configModel);
+
+            return configString;
+        }
+
+        private void ReadConfig(string configString)
+        {
+            try
+            {
+                var configModel = JsonConvert.DeserializeObject<ConfigModel>(configString);
+
+                regTextBox.Text = configModel.flagreg;
+                ipTextBox.Text = configModel.iprange;
+                portTextBox.Text = configModel.portrange;
+
+                requestList = configModel.requestList;
+                tab.ItemsSource = requestList;
+                tab.SelectedIndex = requestList.Count - 1;
+
+                flagUrlTextBox.Text = configModel.flagurl;
+                flagIDTextBox.Text = configModel.flagidrange;
+
+                if (configModel.flaghttpmode == "GET")
+                {
+                    getflagRadioButton.IsChecked = true;
+                }
+                else
+                {
+                    postflagRadioButton.IsChecked = true;
+                }
+
+
+                headerflagTextBox.Text = configModel.flagheader;
+                paramflagTextBox.Text = configModel.flagparam;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("配置文件读取错误");
+            }
+        }
+
+        private bool SaveConfig(string configModel, string path)
+        {
+
+            File.Create(path).Close();
+            StreamWriter stream = new StreamWriter(path);
+            stream.WriteLine(configModel);
+            stream.Dispose();//流关闭
+
+            return true;
+        }
+
+
+
+        private void exportButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+            sfd.InitialDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+            sfd.Filter = "配置文件|*.json;*.txt;*.config;";
+            sfd.FileName = "config";
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Debug.WriteLine(sfd.FileName);
+                SaveConfig(BuildConfig(), sfd.FileName);
+            }
+
+        }
+
+        private void importButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.InitialDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+            ofd.Filter = "配置文件|*.json;*.txt;*.config;";
+            ofd.FileName = "config";
+
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string config = File.ReadAllText(ofd.FileName);
+                ReadConfig(config);
+            }
+
 
         }
     }

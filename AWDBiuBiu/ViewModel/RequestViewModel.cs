@@ -27,7 +27,7 @@ namespace AWDBiuBiu.ViewModel
         public string Filepath { get { return filepath; } set { filepath = value; OnPropertyChanged("Filepath"); } }
         public string Fileparam { get { return fileparam; } set { fileparam = value; OnPropertyChanged("Fileparam"); } }
         public string Attackurl { get; set; }
-        public string Host { get { return new Uri(Attackurl).Host; } }
+        public string Host { get { return string.IsNullOrEmpty(Attackurl) ? string.Empty : new Uri(Attackurl).Host; } }
 
         public RequestViewModel()
         {

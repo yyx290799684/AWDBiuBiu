@@ -7,7 +7,7 @@
         xmlns:converter="clr-namespace:AWDBiuBiu.Converter"
         xmlns:local="clr-namespace:AWDBiuBiu"
         mc:Ignorable="d"
-        Title="AWDBiuBiu" Height="600" MinWidth="850" Width="850">
+        Title="AWDBiuBiu" Height="650" MinWidth="850" Width="900">
 
     <Window.Resources>
         <converter:Boolean2VisibilityConverter x:Key="Boolean2VisibilityConverter"/>
@@ -129,12 +129,14 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Margin="0,0,5,0">
-                <StackPanel Orientation="Horizontal" >
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="flag提交:"/>
-                        <TextBox Name="flagUrlTextBox" Text="http://www.getflag.com?flag={}" Width="500" GotFocus="textBox_GotFocus"/>
-                    </StackPanel>
-                </StackPanel>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="flag提交:"/>
+                    <TextBox Name="flagUrlTextBox" Grid.Column="1" Text="http://www.getflag.com?flag={0}&amp;id={1}"  GotFocus="textBox_GotFocus"/>
+                </Grid>
                 <StackPanel Orientation="Horizontal"  Margin="0,5,0,0">
                     <TextBlock Text="flag提交ID范围(可空):"/>
                     <TextBox Name="flagIDTextBox" Text="2109-2110" Width="100"/>
@@ -159,6 +161,8 @@
                 </Grid>
 
                 <TextBlock Text="Demo:" Margin="0,10,0,0"/>
+                <TextBlock Text="攻击url:&#x000D;&#x0009;{0}为IP范围;{1}为端口范围"/>
+                <TextBlock Text="提交Flagurl:&#x000D;&#x0009;{0}为Flag;{1}为ID"/>
                 <TextBlock Text="Header:&#x000D;&#x0009;Accept-Encoding: gzip, deflate&#x000D;&#x0009;Accept-Language: zh-CN,zh;q=0.9&#x000D;&#x0009;Cookie: xx "/>
                 <TextBlock Text="参数:&#x000D;&#x0009;a=1&amp;b=2"/>
 
@@ -168,7 +172,14 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Text="日志输出"/>
+                <Grid>
+                    <TextBlock Text="日志输出" VerticalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Name="exportButton" Content="导出配置" Margin="0,0,5,0" Click="exportButton_Click"/>
+                        <Button Name="importButton" Content="导入配置" Click="importButton_Click"/>
+                    </StackPanel>
+                </Grid>
                 <TextBox Name="logTextBox" Grid.Row="1" Margin="0,5,0,0"/>
             </Grid>
         </Grid>
