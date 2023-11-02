@@ -112,7 +112,6 @@ namespace AWDBiuBiu
             threadCheckBox.IsEnabled = false;
             threadCheckBox.SetBinding(IsEnabledProperty, new Binding("Items.Count") { ElementName = "tab", Converter = new ThreadEnableConverter() });
             attackcount++;
-            // url = "http://124.160.12.17:18890/flag.html";
             DoAttack();
         }
         private void stopButton_Click(object sender, RoutedEventArgs e)
@@ -234,27 +233,51 @@ namespace AWDBiuBiu
 
         private async void SubFlag(string flag)
         {
-            if (string.IsNullOrEmpty(flagIDTextBox.Text))
+            if (string.IsNullOrEmpty(paramJsonflagTextBox.Text))
             {
-                headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
-                paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
-                var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
-                PutLog(flag, ret);
-            }
-            else
-            {
-                var ids = Utils.BuildStartAndEnd(flagIDTextBox.Text.Trim());
-                var idstart = ids.Key;
-                var ipend = ids.Value;
-
-                for (int id = idstart; id <= ipend; id++)
+                if (string.IsNullOrEmpty(flagIDTextBox.Text))
                 {
                     headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
                     paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
-                    var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag, id), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
+                    var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
                     PutLog(flag, ret);
                 }
+                else
+                {
+                    var ids = Utils.BuildStartAndEnd(flagIDTextBox.Text.Trim());
+                    var idstart = ids.Key;
+                    var ipend = ids.Value;
 
+                    for (int id = idstart; id <= ipend; id++)
+                    {
+                        headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
+                        paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
+                        var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag, id), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
+                        PutLog(flag, ret);
+                    }
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(flagIDTextBox.Text))
+                {
+                    headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
+                    var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), jsonParam: paramJsonflagTextBox.Text.Trim().Replace("{0}", flag), headerList: headerflagList, mode: flagmode);
+                    PutLog(flag, ret);
+                }
+                else
+                {
+                    var ids = Utils.BuildStartAndEnd(flagIDTextBox.Text.Trim());
+                    var idstart = ids.Key;
+                    var ipend = ids.Value;
+
+                    for (int id = idstart; id <= ipend; id++)
+                    {
+                        headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
+                        var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), jsonParam: paramJsonflagTextBox.Text.Trim().Replace("{0}", flag), headerList: headerflagList, mode: flagmode);
+                        PutLog(flag, ret);
+                    }
+                }
             }
 
         }
@@ -304,7 +327,8 @@ namespace AWDBiuBiu
             configModel.flaghttpmode = flagmode;
             configModel.flagheader = headerflagTextBox.Text.Trim();
             configModel.flagparam = paramflagTextBox.Text.Trim();
-
+            configModel.flagjsonparam = paramJsonflagTextBox.Text.Trim();
+            
             var configString = JsonConvert.SerializeObject(configModel);
 
             return configString;
@@ -339,6 +363,7 @@ namespace AWDBiuBiu
 
                 headerflagTextBox.Text = configModel.flagheader;
                 paramflagTextBox.Text = configModel.flagparam;
+                paramJsonflagTextBox.Text = configModel.flagjsonparam;
             }
             catch (Exception)
             {

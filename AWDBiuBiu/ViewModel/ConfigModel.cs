@@ -20,5 +20,6 @@ namespace AWDBiuBiu.ViewModel
         public string flaghttpmode { get; set; }
         public string flagheader { get; set; }
         public string flagparam { get; set; }
+        public string flagjsonparam { get; set; }
     }
 }

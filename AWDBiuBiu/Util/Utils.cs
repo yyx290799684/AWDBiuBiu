@@ -54,7 +54,7 @@ namespace AWDBiuBiu.Util
                     }
                     else
                     {
-                        keyValuePairs.Add(new KeyValuePair<string, string>(kvs[0].Trim(), item.Replace(kvs[0].Trim() + "=", string.Empty)));
+                        keyValuePairs.Add(new KeyValuePair<string, string>(kvs[0].Trim(), item.Replace(kvs[0].Trim() + sp2, string.Empty)));
                     }
                 }
             }

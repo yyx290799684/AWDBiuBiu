@@ -23,7 +23,7 @@ namespace AWDBiuBiu.Util
      /// <param name="fileParam">上传文件的参数名</param>
      /// <param name="isNeedErrorReturn">是否需要不是200的返回</param>
      /// <returns></returns>
-        public static async Task<string> getHttpWebRequest(string api, string content = "", List<KeyValuePair<string, string>> paramList = null, List<KeyValuePair<string, string>> headerList = null, string mode = "POST", string filePath = "", string fileParam = "", bool isNeedErrorReturn = false)
+        public static async Task<string> getHttpWebRequest(string api, string content = "", List<KeyValuePair<string, string>> paramList = null, List<KeyValuePair<string, string>> headerList = null, string mode = "POST", string filePath = "", string fileParam = "", bool isNeedErrorReturn = false, string jsonParam = "")
         {
             HttpResponseMessage response = null;
             string responseReturn = "";
@@ -47,7 +47,11 @@ namespace AWDBiuBiu.Util
                     {
                         case "POST":
                             //requst = new HttpRequestMessage(HttpMethod.Post, new Uri(uri));
-                            if (string.IsNullOrEmpty(filePath))
+                            if (!string.IsNullOrEmpty(jsonParam))
+                            {
+                                response = httpClient.PostAsync(new Uri(uri), new StringContent(jsonParam, Encoding.UTF8, "application/json")).Result;
+                            }
+                            else if (string.IsNullOrEmpty(filePath))
                             {
                                 response = httpClient.PostAsync(new Uri(uri), new System.Net.Http.FormUrlEncodedContent(paramList)).Result;
                             }
