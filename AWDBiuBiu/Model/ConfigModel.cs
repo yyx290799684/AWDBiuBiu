@@ -20,6 +20,7 @@ namespace AWDBiuBiu.Model
 
         private ICommand exportConfigCommand;
 
+        [JsonIgnore]
         public ICommand ExportConfigCommand
         {
             get
@@ -43,7 +44,7 @@ namespace AWDBiuBiu.Model
 
         private string BuildConfig()
         {
-            var configString = JsonConvert.SerializeObject(this);
+            var configString = JsonConvert.SerializeObject(this, Formatting.Indented);
             return configString;
         }
 
@@ -67,6 +68,7 @@ namespace AWDBiuBiu.Model
 
         private ICommand addRequestCommand;
 
+        [JsonIgnore]
         public ICommand AddRequestCommand
         {
             get
@@ -85,4 +87,30 @@ namespace AWDBiuBiu.Model
             }
         }
     }
+
+    public class CommitConfigModel
+    {
+        public ObservableCollection<CommitViewModel> CommitList { get; set; } = new ObservableCollection<CommitViewModel>();
+
+        private ICommand addCommitCommand;
+
+        public ICommand AddCommitCommand
+        {
+            get
+            {
+                return addCommitCommand ?? (addCommitCommand = new CommandHandler(() => AddCommit()));
+            }
+        }
+
+        private void AddCommit()
+        {
+            AddCommitDialog addCommitDialog = new AddCommitDialog();
+            if (addCommitDialog.ShowDialog() == true)
+            {
+                var commit = addCommitDialog._commitViewModel;
+                CommitList.Add(commit);
+            }
+        }
+    }
 }
+

@@ -1,0 +1,23 @@
+﻿<Window Name="window" x:Class="AWDBiuBiu.View.AddCommitDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:converter="clr-namespace:AWDBiuBiu.Converter"
+        xmlns:resource="clr-namespace:AWDBiuBiu.Resource"
+        xmlns:local="clr-namespace:AWDBiuBiu.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        VerticalAlignment="Stretch"
+        SizeToContent="Height"
+        Title="新增Flag提交" MinHeight="300" Width="500">
+
+    <Window.Resources>
+        <converter:Enum2VisibilityConverter x:Key="Enum2VisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid>
+
+    </Grid>
+</Window>

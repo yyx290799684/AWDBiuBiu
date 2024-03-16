@@ -28,6 +28,7 @@ namespace AWDBiuBiu.View
         public static ConfigModel configModel = null;
         MainPage mainPage = new MainPage();
         RequestManagePage requestManagePage;
+        CommitManagePage commitManagePage;
 
 
         public MainWindow()
@@ -72,6 +73,8 @@ namespace AWDBiuBiu.View
             window.DataContext = configModel;
             if (requestManagePage != null)
                 requestManagePage.DataContext = configModel;
+            if (commitManagePage != null)
+                commitManagePage.DataContext = configModel;
         }
 
         private void InitConfig()
@@ -97,14 +100,12 @@ namespace AWDBiuBiu.View
                         requestManagePage = new RequestManagePage(configModel);
                     mainFrame.Navigate(requestManagePage);
                     break;
-                    //case DrawerItemType.CommitManage: //提交管理
-                    //    mainFrame.Source = null;
-                    //    if (linkManagePage == null)
-                    //        linkManagePage = new LinkManagePage();
-                    //    if (App.linkPageViewModel != null)
-                    //        App.linkPageViewModel.LoadDevice();
-                    //    mainFrame.Navigate(linkManagePage);
-                    //    break;
+                case DrawerItemType.CommitManage: //提交管理
+                    mainFrame.Source = null;
+                    if (commitManagePage == null)
+                        commitManagePage = new CommitManagePage();
+                    mainFrame.Navigate(commitManagePage);
+                    break;
                     //case DrawerItemType.AttackManage: //攻击管理
                     //    mainFrame.Source = null;
                     //    if (settingPage == null)

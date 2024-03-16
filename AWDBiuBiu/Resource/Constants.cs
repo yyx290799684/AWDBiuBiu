@@ -45,4 +45,11 @@ namespace AWDBiuBiu.Resource
         拼接,
         来自列表,
     }
+
+    public enum PostMode
+    {
+        键值对,
+        FormData,
+        JSON
+    }
 }

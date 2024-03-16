@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AWDBiuBiu.View"
       xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:resource="clr-namespace:AWDBiuBiu.Resource"
       xmlns:converter="clr-namespace:AWDBiuBiu.Converter"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -30,18 +31,38 @@
 
         <DataTemplate x:Key="requestListViewDataTemplate">
             <Grid Background="Transparent"  >
-                <Grid Height="50" >
+                <Grid  Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Name="tb" Text="{Binding Url}" FontSize="12"  VerticalAlignment="Center" Margin="10,0,0,0"/>
 
-                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Url}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" MaxWidth="450"
+                                       Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.拼接}}"/>
+                        <TextBlock Text="{Binding UrlList.Count,StringFormat=，{0}条}" ToolTip="{Binding UrlListString}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"
+                                       Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.拼接}}"/>
+                        <TextBlock Text="{Binding UrlList.Count,StringFormat=URL列表，{0}条}" ToolTip="{Binding UrlListString}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"
+                                       Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.来自列表}}"/>
+
+                        <Border Margin="10,0,0,0" Background="#96E8AE" CornerRadius="4" VerticalAlignment="Center" Padding="4,2">
+                            <TextBlock Text="{Binding _HttpMode}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                        </Border>
+                        <Border Margin="10,0,0,0" Background="#FAC601" CornerRadius="4" ToolTip="{Binding PostParamString}" VerticalAlignment="Center" Padding="4,2" Visibility="{Binding _HttpMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:HttpMode.POST}}">
+                            <TextBlock Text="{Binding _PostMode}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                        </Border>
+                        <Border Margin="10,0,0,0" Background="#FF9800" CornerRadius="4" ToolTip="{Binding Header}" VerticalAlignment="Center" Padding="4,2" Visibility="{Binding Header,Converter={StaticResource StringEmpty2VisibilityReConverter}}">
+                            <TextBlock Text="自定义Header" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1"  VerticalAlignment="Center">
                         <Button Content="编辑" Cursor="Hand" Command="{Binding EditCommand}" Style="{StaticResource ButtonInfo}"/>
-                        <Button Content="删除" Cursor="Hand" Command="{Binding DeleteCommand}" Margin="5,0,10,0" Style="{StaticResource ButtonDanger}"/>
+                        <Button Content="删除" Cursor="Hand" Command="{Binding DeleteCommand}" Margin="5,0,0,0" Style="{StaticResource ButtonDanger}"/>
                     </StackPanel>
                 </Grid>
+                <hc:Divider Margin="0" VerticalAlignment="Bottom" />
             </Grid>
         </DataTemplate>
     </Page.Resources>

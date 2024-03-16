@@ -11,23 +11,8 @@
         mc:Ignorable="d"
         VerticalAlignment="Stretch"
         SizeToContent="Height"
-        Title="新增请求" MinHeight="300" Width="500">
+        Title="新增/编辑请求" MinHeight="300" Width="500">
     <Window.Resources>
-        <converter:HttpMode2SelectedIndexConverter x:Key="HttpMode2SelectedIndexConverter"/>
-        <converter:UrlSource2SelectedIndexConverter x:Key="UrlSource2SelectedIndexConverter"/>
-        <converter:Enum2VisibilityConverter x:Key="Enum2VisibilityConverter"/>
-
-        <ObjectDataProvider x:Key="HttpModeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="resource:HttpMode"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-
-        <ObjectDataProvider x:Key="UrlSourceProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="resource:UrlSource"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
     </Window.Resources>
 
     <Grid Margin="5">
@@ -78,26 +63,53 @@
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBox Margin="5" Name="headerTextBox" Text="{Binding Header,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="Header参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}"/>
-                <Grid Margin="5"  Grid.Row="1" Visibility="{Binding _HttpMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:HttpMode.POST}}">
+                <TextBox Margin="5" Name="headerTextBox" Text="{Binding Header,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="Header参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}" AcceptsReturn="True"/>
+
+                <hc:Divider Grid.Row="1" Margin="0,5"/>
+
+                <Grid Margin="5" Grid.Row="2" Visibility="{Binding _HttpMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:HttpMode.POST}}" >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBox Name="postTextBox" Text="{Binding Param,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="POST参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}"/>
-                    <Grid Grid.Row="1" Margin="0,5,0,0">
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <TextBox Name="postFileArgTextBox" Text="{Binding FileParam,Mode=TwoWay}" Margin="0,0,2,0" hc:InfoElement.Placeholder="FormData参数名"  Style="{StaticResource TextBoxExtend}"/>
-                        <TextBox Name="postFilePathTextBox" Text="{Binding FilePath,Mode=TwoWay}" Grid.Column="1" Margin="2,0,2,0" hc:InfoElement.Placeholder="FormData文件路径"  Style="{StaticResource TextBoxExtend}"/>
-                        <Button Content="浏览" Grid.Column="2" Margin="5,0,0,0"/>
+                        <TextBlock Margin="8,0,0,0" Text="POST设置" VerticalAlignment="Center"/>
+                        <ComboBox Name="postModeComboBox" Grid.Column="1" SelectedItem="{Binding _PostMode}" ItemsSource="{Binding Source={StaticResource PostModeProvider}}" Margin="2,0,0,0" hc:InfoElement.Title="编码类型" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" Style="{StaticResource ComboBoxExtend}"/>
+                    </Grid>
+                    <hc:Divider Grid.Row="1" Margin="0,5"/>
+
+                    <TextBox Name="postTextBox" Grid.Row="2" Margin="0,5,0,0" Text="{Binding Param,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="键值对参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}"
+                              Visibility="{Binding _PostMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:PostMode.键值对}}"/>
+
+                    <TextBox Name="postJsonTextBox" Grid.Row="2" Margin="0,5,0,0" Text="{Binding ParamJson,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="JSON参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}" AcceptsReturn="True"
+                              Visibility="{Binding _PostMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:PostMode.JSON}}"/>
+
+                    <Grid  Grid.Row="2" Visibility="{Binding _PostMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:PostMode.FormData}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="1" Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="postFileArgTextBox" Text="{Binding FileParam,Mode=TwoWay}" Margin="0,0,2,0" hc:InfoElement.Placeholder="FormData参数名"  Style="{StaticResource TextBoxExtend}"/>
+                            <TextBox Name="postFilePathTextBox" Text="{Binding FilePath,Mode=TwoWay}" Grid.Column="1" Margin="2,0,2,0" hc:InfoElement.Placeholder="FormData文件路径"  Style="{StaticResource TextBoxExtend}"/>
+                            <Button Content="浏览" Grid.Column="2" Margin="5,0,0,0" Command="{Binding PostFileSelectCommand}" />
+                        </Grid>
                     </Grid>
                 </Grid>
+
             </Grid>
         </hc:Card>
 
