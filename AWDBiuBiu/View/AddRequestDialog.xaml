@@ -1,0 +1,108 @@
+﻿<Window Name="window" x:Class="AWDBiuBiu.View.AddRequestDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:converter="clr-namespace:AWDBiuBiu.Converter"
+        xmlns:resource="clr-namespace:AWDBiuBiu.Resource"
+        xmlns:local="clr-namespace:AWDBiuBiu.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        VerticalAlignment="Stretch"
+        SizeToContent="Height"
+        Title="新增请求" MinHeight="300" Width="500">
+    <Window.Resources>
+        <converter:HttpMode2SelectedIndexConverter x:Key="HttpMode2SelectedIndexConverter"/>
+        <converter:UrlSource2SelectedIndexConverter x:Key="UrlSource2SelectedIndexConverter"/>
+        <converter:Enum2VisibilityConverter x:Key="Enum2VisibilityConverter"/>
+
+        <ObjectDataProvider x:Key="HttpModeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="resource:HttpMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="UrlSourceProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="resource:UrlSource"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <hc:Card Background="#F2F2F2" Effect="{StaticResource EffectShadow2}">
+            <hc:Card.Header >
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Name="urlSourceComboBox" SelectedItem="{Binding _UrlSource}" ItemsSource="{Binding Source={StaticResource UrlSourceProvider}}" Margin="0,0,2,0" hc:InfoElement.Title="URL来源" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" Style="{StaticResource ComboBoxExtend}"/>
+                    <ComboBox Name="httpModeComboBox" SelectedItem="{Binding _HttpMode}" ItemsSource="{Binding Source={StaticResource HttpModeProvider}}" Margin="2,0,0,0" hc:InfoElement.Title="请求类型" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" Style="{StaticResource ComboBoxExtend}" Grid.Column="1"/>
+                </Grid>
+            </hc:Card.Header>
+            <Grid  Margin="5">
+                <Grid Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.拼接}}">
+                    <!--URL拼接-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding Url,Mode=TwoWay}" Grid.ColumnSpan="2" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="URL" Style="{StaticResource TextBoxExtend}"/>
+
+                    <TextBox Name="ipTextBox" Margin="0,5,2,0" Grid.Row="1" Text="{Binding IpRange,Mode=TwoWay}" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="IP范围" Style="{StaticResource TextBoxExtend}"/>
+                    <TextBox Name="portTextBox" Margin="2,5,0,0"  Grid.Row="1" Grid.Column="1" Text="{Binding PortRange,Mode=TwoWay}" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="端口范围" Style="{StaticResource TextBoxExtend}"/>
+
+                </Grid>
+
+                <Grid Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.来自列表}}">
+                    <!--URL来自列表-->
+                    <TextBox Name="urlListTextBox" Text="{Binding UrlListString,Mode=TwoWay}" AcceptsReturn="True" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Top" hc:InfoElement.Title="URL列表" hc:InfoElement.Placeholder="请输入URL列表，按行分割" Height="120" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}"/>
+                </Grid>
+            </Grid>
+        </hc:Card>
+
+        <hc:Card Margin="0,10,0,0" Grid.Row="1" Background="#F2F2F2" Effect="{StaticResource EffectShadow2}">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBox Margin="5" Name="headerTextBox" Text="{Binding Header,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="Header参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}"/>
+                <Grid Margin="5"  Grid.Row="1" Visibility="{Binding _HttpMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:HttpMode.POST}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBox Name="postTextBox" Text="{Binding Param,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="POST参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}"/>
+                    <Grid Grid.Row="1" Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Name="postFileArgTextBox" Text="{Binding FileParam,Mode=TwoWay}" Margin="0,0,2,0" hc:InfoElement.Placeholder="FormData参数名"  Style="{StaticResource TextBoxExtend}"/>
+                        <TextBox Name="postFilePathTextBox" Text="{Binding FilePath,Mode=TwoWay}" Grid.Column="1" Margin="2,0,2,0" hc:InfoElement.Placeholder="FormData文件路径"  Style="{StaticResource TextBoxExtend}"/>
+                        <Button Content="浏览" Grid.Column="2" Margin="5,0,0,0"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </hc:Card>
+
+
+        <Button Name="saveButton" Content="保存" Grid.Row="3" Margin="0,10,0,0" Height="30" HorizontalAlignment="Stretch" Style="{StaticResource ButtonSuccess}" Click="saveButton_Click"/>
+
+    </Grid>
+</Window>

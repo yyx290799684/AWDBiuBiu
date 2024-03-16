@@ -23,9 +23,9 @@ using System.Windows.Shapes;
 namespace AWDBiuBiu
 {
     /// <summary>
-    /// MainWindow.xaml 的交互逻辑
+    /// DemoWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DemoWindow : Window
     {
         int attackcount = 0;
         int requestcount = 0;
@@ -43,7 +43,7 @@ namespace AWDBiuBiu
         List<KeyValuePair<string, string>> paramflagList = null;
         bool isthread = false;
 
-        public MainWindow()
+        public DemoWindow()
         {
             InitializeComponent();
 
@@ -61,7 +61,7 @@ namespace AWDBiuBiu
             else
             {
 
-                requestList.Add(new RequestViewModel() { Id = ++requestcount });
+                requestList.Add(new RequestViewModel() );
                 tab.ItemsSource = requestList;
             }
         }
@@ -70,7 +70,6 @@ namespace AWDBiuBiu
         {
             requestList.Add(new RequestViewModel()
             {
-                Id = ++requestcount,
                 Url = (tab.SelectedItem as RequestViewModel).Url,
                 Header = (tab.SelectedItem as RequestViewModel).Header,
             });
@@ -209,7 +208,7 @@ namespace AWDBiuBiu
 
         private async Task SendAttack(RequestViewModel requestViewModel)
         {
-            var ret = await NetWork.getHttpWebRequest(requestViewModel.Attackurl, paramList: requestViewModel.ParamList, headerList: requestViewModel.HeaderList, mode: requestViewModel.Mode, filePath: requestViewModel.Filepath, fileParam: requestViewModel.Fileparam);
+            var ret = await NetWork.getHttpWebRequest(requestViewModel.Attackurl, paramList: requestViewModel.ParamList, headerList: requestViewModel.HeaderList, mode: requestViewModel.Mode, filePath: requestViewModel.FilePath, fileParam: requestViewModel.FileParam);
             if (!string.IsNullOrEmpty(ret))
             {
                 if (!string.IsNullOrEmpty(reg))
@@ -292,7 +291,7 @@ namespace AWDBiuBiu
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                requestList.Where(p => p.Id == (int)(sender as Button).Tag).ToList()[0].Filepath = openFileDialog.FileName.ToString();
+                //requestList.Where(p => p.Id == (int)(sender as Button).Tag).ToList()[0].FilePath = openFileDialog.FileName.ToString();
             }
         }
 
@@ -315,7 +314,7 @@ namespace AWDBiuBiu
                 return string.Empty;
             }
 
-            ConfigModel configModel = new ConfigModel();
+            DemoConfigModel configModel = new DemoConfigModel();
             configModel.flagreg = reg;
             configModel.iprange = ipTextBox.Text.Trim();
             configModel.portrange = portTextBox.Text.Trim();
@@ -338,7 +337,7 @@ namespace AWDBiuBiu
         {
             try
             {
-                var configModel = JsonConvert.DeserializeObject<ConfigModel>(configString);
+                var configModel = JsonConvert.DeserializeObject<DemoConfigModel>(configString);
 
                 regTextBox.Text = configModel.flagreg;
                 ipTextBox.Text = configModel.iprange;
