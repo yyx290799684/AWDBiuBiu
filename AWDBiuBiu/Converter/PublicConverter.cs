@@ -153,4 +153,24 @@ namespace AWDBiuBiu.Converter
             return parameter;
         }
     }
+
+    public class Enum2VisibilityReConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value.ToString() == parameter.ToString())
+            {
+                return Visibility.Collapsed;
+            }
+            else
+            {
+                return Visibility.Visible;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return parameter;
+        }
+    }
 }

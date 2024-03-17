@@ -208,7 +208,7 @@ namespace AWDBiuBiu
 
         private async Task SendAttack(RequestViewModel requestViewModel)
         {
-            var ret = await NetWork.getHttpWebRequest(requestViewModel.Attackurl, paramList: requestViewModel.ParamList, headerList: requestViewModel.HeaderList, mode: requestViewModel.Mode, filePath: requestViewModel.FilePath, fileParam: requestViewModel.FileParam);
+            var ret = await NetWork.getHttpWebRequestOld(requestViewModel.Attackurl, paramList: requestViewModel.ParamList, headerList: requestViewModel.HeaderList, mode: requestViewModel.Mode, filePath: requestViewModel.FilePath, fileParam: requestViewModel.FileParam);
             if (!string.IsNullOrEmpty(ret))
             {
                 if (!string.IsNullOrEmpty(reg))
@@ -238,7 +238,7 @@ namespace AWDBiuBiu
                 {
                     headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
                     paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
-                    var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
+                    var ret = await NetWork.getHttpWebRequestOld(string.Format(flagurl, flag), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
                     PutLog(flag, ret);
                 }
                 else
@@ -251,7 +251,7 @@ namespace AWDBiuBiu
                     {
                         headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
                         paramflagList = Utils.BuildKeyValuePairList(string.Format(paramflagTextBox.Text.Trim(), flag), '&', '=');
-                        var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag, id), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
+                        var ret = await NetWork.getHttpWebRequestOld(string.Format(flagurl, flag, id), paramList: paramflagList, headerList: headerflagList, mode: flagmode);
                         PutLog(flag, ret);
                     }
                 }
@@ -261,7 +261,7 @@ namespace AWDBiuBiu
                 if (string.IsNullOrEmpty(flagIDTextBox.Text))
                 {
                     headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
-                    var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), jsonParam: paramJsonflagTextBox.Text.Trim().Replace("{0}", flag), headerList: headerflagList, mode: flagmode);
+                    var ret = await NetWork.getHttpWebRequestOld(string.Format(flagurl, flag), jsonParam: paramJsonflagTextBox.Text.Trim().Replace("{0}", flag), headerList: headerflagList, mode: flagmode);
                     PutLog(flag, ret);
                 }
                 else
@@ -273,7 +273,7 @@ namespace AWDBiuBiu
                     for (int id = idstart; id <= ipend; id++)
                     {
                         headerflagList = Utils.BuildKeyValuePairList(headerflagTextBox.Text.Trim().Replace('\r', ' '), '\n', ':');
-                        var ret = await NetWork.getHttpWebRequest(string.Format(flagurl, flag), jsonParam: paramJsonflagTextBox.Text.Trim().Replace("{0}", flag), headerList: headerflagList, mode: flagmode);
+                        var ret = await NetWork.getHttpWebRequestOld(string.Format(flagurl, flag), jsonParam: paramJsonflagTextBox.Text.Trim().Replace("{0}", flag), headerList: headerflagList, mode: flagmode);
                         PutLog(flag, ret);
                     }
                 }

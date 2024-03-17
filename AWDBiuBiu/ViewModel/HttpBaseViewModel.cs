@@ -1,4 +1,5 @@
 ﻿using AWDBiuBiu.Resource;
+using AWDBiuBiu.Util;
 using AWDBiuBiu.View;
 using Newtonsoft.Json;
 using System;
@@ -20,7 +21,7 @@ namespace AWDBiuBiu.ViewModel
         private string header { get; set; }
         private string param { get; set; }
         private string paramjson { get; set; }
-        private string url { get; set; } = "http://192.168.{0}.1:{1}/";
+        private string url { get; set; } 
 
 
         public PostMode _PostMode { get { return postmodel; } set { postmodel = value; OnPropertyChanged("_PostMode"); OnPropertyChanged("PostParamString"); } }
@@ -31,6 +32,11 @@ namespace AWDBiuBiu.ViewModel
         public string Param { get { return string.IsNullOrEmpty(param) ? string.Empty : param.Trim(); } set { param = value.Trim(); OnPropertyChanged("Param"); OnPropertyChanged("PostParamString"); } }
         public string ParamJson { get { return string.IsNullOrEmpty(paramjson) ? string.Empty : paramjson.Trim(); } set { paramjson = value.Trim(); OnPropertyChanged("ParamJson"); OnPropertyChanged("PostParamString"); } }
         public string Url { get { return url; } set { url = value; OnPropertyChanged("Url"); OnPropertyChanged("UrlList"); } }
+
+        [JsonIgnore]
+        public List<KeyValuePair<string, string>> HeaderList { get { return Utils.BuildKeyValuePairList(Header.Trim().Replace('\r', ' '), '\n', ':'); } }
+        [JsonIgnore]
+        public List<KeyValuePair<string, string>> ParamList { get { return Utils.BuildKeyValuePairList(Param.Trim(), '&', '='); } }
 
         [JsonIgnore]
         public string PostParamString

@@ -22,6 +22,9 @@ namespace AWDBiuBiu.View
     {
 
         public CommitViewModel _commitViewModel { get; set; } = new CommitViewModel();
+        string oldFlagCommitName = string.Empty;
+        bool isEdit = false;
+
         public AddCommitDialog()
         {
             InitializeComponent();
@@ -31,14 +34,51 @@ namespace AWDBiuBiu.View
         public AddCommitDialog(CommitViewModel commitViewModel)
         {
             InitializeComponent();
+            oldFlagCommitName = commitViewModel.FlagCommitName;
+            _commitViewModel = commitViewModel;
             window.DataContext = commitViewModel;
+            isEdit = true;
         }
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(_commitViewModel.FlagCommitName) || string.IsNullOrEmpty(_commitViewModel.Url))
+            {
+                return;
+            }
+
+
+            if (isEdit)
+            {
+                if (MainWindow.configModel.CommitConfigModel.CommitList.Count(p => p.FlagCommitName.Equals(_commitViewModel.FlagCommitName)) > 1)
+                {
+                    _commitViewModel.FlagCommitName = oldFlagCommitName;
+                    return;
+                }
+            }
+            else
+            {
+                if (MainWindow.configModel.CommitConfigModel.CommitList.Count(p => p.FlagCommitName.Equals(_commitViewModel.FlagCommitName)) > 0)
+                {
+                    return;
+                }
+            }
+
+           
+
+            var oldNameUsedList = MainWindow.configModel.RequestConfigModel.RequestList.Where(p => p.FlagCommitNameSelect.Equals(oldFlagCommitName)).ToList();
+            if (oldNameUsedList != null && oldNameUsedList.Count > 0)
+            {
+                foreach (var item in oldNameUsedList)
+                {
+                    item.FlagCommitNameSelect = _commitViewModel.FlagCommitName;
+                }
+            }
+
             DialogResult = true;
             this.Close();
         }
 
     }
 }
+

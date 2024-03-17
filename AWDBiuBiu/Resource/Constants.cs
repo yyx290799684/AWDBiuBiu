@@ -20,9 +20,9 @@ namespace AWDBiuBiu.Resource
         public static ObservableCollection<DrawerListViewModel> drawerMenuList = new ObservableCollection<DrawerListViewModel>()
         {
             new DrawerListViewModel(){title="首页",type=DrawerItemType.Home},
-            new DrawerListViewModel(){title="请求管理",type=DrawerItemType.RequestManage},
             new DrawerListViewModel(){title="提交管理",type=DrawerItemType.CommitManage },
-            new DrawerListViewModel(){title="攻击管理",type=DrawerItemType.AttackManage },
+            new DrawerListViewModel(){title="请求管理",type=DrawerItemType.RequestManage},
+            //new DrawerListViewModel(){title="攻击管理",type=DrawerItemType.AttackManage },
         };
     }
 
@@ -49,7 +49,13 @@ namespace AWDBiuBiu.Resource
     public enum PostMode
     {
         键值对,
+        JSON,
         FormData,
+    }
+
+    public enum FlagPostMode
+    {
+        键值对,
         JSON
     }
 }

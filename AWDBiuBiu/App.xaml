@@ -15,6 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converter:Enum2VisibilityConverter x:Key="Enum2VisibilityConverter"/>
+            <converter:Enum2VisibilityReConverter x:Key="Enum2VisibilityReConverter"/>
             <converter:StringEmpty2VisibilityReConverter x:Key="StringEmpty2VisibilityReConverter"/>
 
             <ObjectDataProvider x:Key="HttpModeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
@@ -32,6 +33,12 @@
             <ObjectDataProvider x:Key="PostModeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="resource:PostMode"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="FlagPostModeProvider" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="resource:FlagPostMode"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 

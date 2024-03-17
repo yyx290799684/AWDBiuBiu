@@ -17,6 +17,7 @@ namespace AWDBiuBiu.Model
     public class ConfigModel
     {
         public RequestConfigModel RequestConfigModel { get; set; } = new RequestConfigModel();
+        public CommitConfigModel CommitConfigModel { get; set; } = new CommitConfigModel();
 
         private ICommand exportConfigCommand;
 
@@ -42,14 +43,14 @@ namespace AWDBiuBiu.Model
             }
         }
 
-        private string BuildConfig()
+        public string BuildConfig()
         {
             var configString = JsonConvert.SerializeObject(this, Formatting.Indented);
             return configString;
         }
 
 
-        private bool SaveConfig(string configModel, string path)
+        public bool SaveConfig(string configModel, string path)
         {
 
             File.Create(path).Close();

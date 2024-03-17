@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:AWDBiuBiu.View"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="AWDBiuBiu" Height="650" MinWidth="150" Width="900">
+        WindowStartupLocation="CenterScreen"
+        Title="AWDBiuBiu" Height="650" MinWidth="500" Width="1000">
 
     <Window.Resources>
         <Storyboard x:Key="ShowToastStoryboard" x:Name="ShowToastStoryboard" >
@@ -119,7 +120,6 @@
                     <Button Name="exportButton" Content="导出配置" Cursor="Hand" HorizontalAlignment="Stretch" Margin="5,0,5,10" Command="{Binding ExportConfigCommand}"/>
                     <Button Name="importButton" Content="导入配置" Cursor="Hand" HorizontalAlignment="Stretch" Margin="5,0,5,10" Style="{StaticResource ButtonWarning}" Click="importButton_Click"/>
                     <TextBlock Text="V1.0"  Foreground="White" HorizontalAlignment="Left" Margin="5,0,0,10" Opacity="0.9"/>
-                    <TextBlock Text="by 浙江联通云网运营中心"  Foreground="White" HorizontalAlignment="Left" Margin="5,0,0,10" Opacity="0.9"/>
                 </StackPanel>
             </Grid>
         </Border>

@@ -103,7 +103,7 @@ namespace AWDBiuBiu.View
                 case DrawerItemType.CommitManage: //提交管理
                     mainFrame.Source = null;
                     if (commitManagePage == null)
-                        commitManagePage = new CommitManagePage();
+                        commitManagePage = new CommitManagePage(configModel);
                     mainFrame.Navigate(commitManagePage);
                     break;
                     //case DrawerItemType.AttackManage: //攻击管理

@@ -38,27 +38,60 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Url}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" MaxWidth="450"
-                                       Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.拼接}}"/>
-                        <TextBlock Text="{Binding UrlList.Count,StringFormat=，{0}条}" ToolTip="{Binding UrlListString}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"
-                                       Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.拼接}}"/>
-                        <TextBlock Text="{Binding UrlList.Count,StringFormat=URL列表，{0}条}" ToolTip="{Binding UrlListString}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"
+
+                        <StackPanel Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.拼接}}">
+                            <TextBox Text="{Binding Url}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" MaxWidth="400" TextWrapping="Wrap" MaxLines="3" Padding="8"/>
+                            <hc:Divider Margin="0,4,-4,4"  />
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBox Text="{Binding IpRange,Mode=TwoWay}" FontSize="12" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="IP范围" Style="{StaticResource TextBoxExtend.Small}" />
+                                <TextBox Text="{Binding PortRange,Mode=TwoWay}" FontSize="12" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="端口范围" Style="{StaticResource TextBoxExtend.Small}" Margin="4,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Text="URL列表" ToolTip="{Binding UrlListString}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"
                                        Visibility="{Binding _UrlSource,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:UrlSource.来自列表}}"/>
 
-                        <Border Margin="10,0,0,0" Background="#96E8AE" CornerRadius="4" VerticalAlignment="Center" Padding="4,2">
-                            <TextBlock Text="{Binding _HttpMode}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
-                        </Border>
-                        <Border Margin="10,0,0,0" Background="#FAC601" CornerRadius="4" ToolTip="{Binding PostParamString}" VerticalAlignment="Center" Padding="4,2" Visibility="{Binding _HttpMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:HttpMode.POST}}">
-                            <TextBlock Text="{Binding _PostMode}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
-                        </Border>
-                        <Border Margin="10,0,0,0" Background="#FF9800" CornerRadius="4" ToolTip="{Binding Header}" VerticalAlignment="Center" Padding="4,2" Visibility="{Binding Header,Converter={StaticResource StringEmpty2VisibilityReConverter}}">
-                            <TextBlock Text="自定义Header" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
-                        </Border>
+
+                        <hc:Divider Margin="4,0" Orientation="Vertical" />
+
+
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4"  VerticalAlignment="Center"  HorizontalAlignment="Left">
+                                <Border Background="#7ECCF7" CornerRadius="4" VerticalAlignment="Center" Padding="4,2">
+                                    <TextBlock Text="{Binding UrlList.Count,StringFormat={}{0}条}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </Border>
+
+                                <Border Margin="8,0,0,0" Background="#96E8AE" CornerRadius="4" VerticalAlignment="Center" Padding="4,2">
+                                    <TextBlock Text="{Binding _HttpMode}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </Border>
+                                <Border Margin="8,0,0,0" Background="#FAC601" CornerRadius="4" ToolTip="{Binding PostParamString}" VerticalAlignment="Center" Padding="4,2" Visibility="{Binding _HttpMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:HttpMode.POST}}">
+                                    <TextBlock Text="{Binding _PostMode}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </Border>
+                                <Border Margin="8,0,0,0" Background="#FF9800" CornerRadius="4" ToolTip="{Binding Header}" VerticalAlignment="Center" Padding="4,2" Visibility="{Binding Header,Converter={StaticResource StringEmpty2VisibilityReConverter}}">
+                                    <TextBlock Text="自定义Header" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+
+
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,4" Grid.Row="1" VerticalAlignment="Center"  HorizontalAlignment="Left">
+                                <Border  Background="#CE98FA"  CornerRadius="4" ToolTip="{Binding Header}" VerticalAlignment="Center" Padding="4,2" HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding FlagReg}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </Border>
+
+                                <Border Margin="8,0,0,0" Background="#FA6F60" CornerRadius="4" VerticalAlignment="Center" Padding="4,2">
+                                    <TextBlock Text="{Binding FlagCommitNameSelect}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
 
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1"  VerticalAlignment="Center">
-                        <Button Content="编辑" Cursor="Hand" Command="{Binding EditCommand}" Style="{StaticResource ButtonInfo}"/>
+                        <Button Content="启动" Cursor="Hand" Command="{Binding StartCommand}" Style="{StaticResource ButtonSuccess}"/>
+                        <Button Content="编辑" Cursor="Hand" Command="{Binding EditCommand}" Margin="5,0,0,0" Style="{StaticResource ButtonInfo}"/>
                         <Button Content="删除" Cursor="Hand" Command="{Binding DeleteCommand}" Margin="5,0,0,0" Style="{StaticResource ButtonDanger}"/>
                     </StackPanel>
                 </Grid>
@@ -80,7 +113,7 @@
             <hc:Card.Header >
                 <Grid Margin="10">
                     <TextBlock TextWrapping="NoWrap" FontSize="16" TextTrimming="CharacterEllipsis" FontWeight="Bold" Text="请求管理" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                    <Button Content="新增" HorizontalAlignment="Right" Style="{StaticResource ButtonPrimary}" Command="{Binding AddRequestCommand}"/>
+                    <Button Content="新增" Cursor="Hand" HorizontalAlignment="Right" Style="{StaticResource ButtonPrimary}" Command="{Binding AddRequestCommand}"/>
                 </Grid>
             </hc:Card.Header>
             <ItemsControl ItemsSource="{Binding RequestList}" Style="{StaticResource requestListViewStyle}">

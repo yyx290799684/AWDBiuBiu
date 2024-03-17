@@ -200,6 +200,7 @@
     <Compile Include="Converter\PublicConverter.cs" />
     <Compile Include="Model\ConfigModel.cs" />
     <Compile Include="Resource\Constants.cs" />
+    <Compile Include="ViewModel\AttackViewModel.cs" />
     <Compile Include="ViewModel\CommandHandler.cs" />
     <Compile Include="ViewModel\CommitViewModel.cs" />
     <Compile Include="ViewModel\DrawerListViewModel.cs" />
@@ -209,6 +210,12 @@
     </Compile>
     <Compile Include="View\AddRequestDialog.xaml.cs">
       <DependentUpon>AddRequestDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AttackDialog.xaml.cs">
+      <DependentUpon>AttackDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AttackManagePage.xaml.cs">
+      <DependentUpon>AttackManagePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\CommitManagePage.xaml.cs">
       <DependentUpon>CommitManagePage.xaml</DependentUpon>
@@ -248,6 +255,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AddRequestDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AttackDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AttackManagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

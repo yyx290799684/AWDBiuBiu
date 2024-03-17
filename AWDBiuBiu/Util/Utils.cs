@@ -18,19 +18,27 @@ namespace AWDBiuBiu.Util
         {
             int start = -1;
             int end = -1;
-            if (str.IndexOf('-') == -1)
+            try
             {
-                if (IsInt(str))
-                    start = end = int.Parse(str);
-            }
-            else
-            {
-                var ars = str.Split('-');
-                if (IsInt(ars[0]))
-                    start = int.Parse(ars[0]);
 
-                if (IsInt(ars[1]))
-                    end = int.Parse(ars[1]);
+
+                if (str.IndexOf('-') == -1)
+                {
+                    if (IsInt(str))
+                        start = end = int.Parse(str);
+                }
+                else
+                {
+                    var ars = str.Split('-');
+                    if (IsInt(ars[0]))
+                        start = int.Parse(ars[0]);
+
+                    if (IsInt(ars[1]))
+                        end = int.Parse(ars[1]);
+                }
+            }
+            catch (Exception)
+            {
             }
             return new KeyValuePair<int, int>(start, end);
         }
@@ -66,7 +74,7 @@ namespace AWDBiuBiu.Util
 
         public static string DoRegex(string ret, string reg)
         {
-            var regex = Regex.Match(ret + "aaaaa", reg);
+            var regex = Regex.Match(ret, reg);
             if (regex.Success)
             {
                 return regex.Value;
