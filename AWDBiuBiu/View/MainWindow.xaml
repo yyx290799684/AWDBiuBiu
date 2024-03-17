@@ -116,10 +116,8 @@
                 <ListView Name="drawerListView" Style="{StaticResource drawerListViewStyle}" Margin="0,5" SelectedIndex="0" Width="150" SelectionChanged="drawerListView_SelectionChanged"/>
 
                 <StackPanel VerticalAlignment="Bottom">
-
                     <Button Name="exportButton" Content="导出配置" Cursor="Hand" HorizontalAlignment="Stretch" Margin="5,0,5,10" Command="{Binding ExportConfigCommand}"/>
                     <Button Name="importButton" Content="导入配置" Cursor="Hand" HorizontalAlignment="Stretch" Margin="5,0,5,10" Style="{StaticResource ButtonWarning}" Click="importButton_Click"/>
-                    <TextBlock Text="V1.0"  Foreground="White" HorizontalAlignment="Left" Margin="5,0,0,10" Opacity="0.9"/>
                 </StackPanel>
             </Grid>
         </Border>

@@ -168,7 +168,7 @@ namespace AWDBiuBiu.ViewModel
             if (string.IsNullOrEmpty(_commitViewModel.FlagIdRange))
             {
                 var ret = await NetWork.getHttpWebRequest(_commitViewModel.Url.Replace("{flag}", flag),
-                                                                            paramList: _commitViewModel.ParamList,
+                                                                            paramList: Utils.BuildKeyValuePairList(_commitViewModel.Param.Trim().Replace("{flag}", flag), '&', '='),
                                                                             jsonParam: _commitViewModel.ParamJson.Replace("{flag}", flag),
                                                                             headerList: _commitViewModel.HeaderList,
                                                                             _HttpMode: _commitViewModel._HttpMode,
@@ -184,7 +184,7 @@ namespace AWDBiuBiu.ViewModel
                 for (int id = idstart; id <= ipend; id++)
                 {
                     var ret = await NetWork.getHttpWebRequest(_commitViewModel.Url.Replace("{flag}", flag).Replace("{flagid}", id.ToString()),
-                                                                            paramList: _commitViewModel.ParamList,
+                                                                            paramList: Utils.BuildKeyValuePairList(_commitViewModel.Param.Trim().Replace("{flag}", flag), '&', '='),
                                                                             jsonParam: _commitViewModel.ParamJson.Replace("{flag}", flag),
                                                                             headerList: _commitViewModel.HeaderList,
                                                                             _HttpMode: _commitViewModel._HttpMode,

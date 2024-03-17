@@ -41,6 +41,7 @@ namespace AWDBiuBiu.View
         private void InitMainPage()
         {
             drawerListView.ItemsSource = DrawerMenu.drawerMenuList;
+            mainFrame.Navigate(mainPage);
 
             if (File.Exists(FilePath.defaultConfigPath))
             {
@@ -142,5 +143,7 @@ namespace AWDBiuBiu.View
             }
 
         }
+
+       
     }
 }

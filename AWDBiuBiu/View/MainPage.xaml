@@ -1,14 +1,29 @@
-﻿<Page x:Class="AWDBiuBiu.View.MainPage"
+﻿<Page Name="page" x:Class="AWDBiuBiu.View.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:local="clr-namespace:AWDBiuBiu.View"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
 
     <Grid>
-        
+
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="AWD竞赛批量提交工具" HorizontalAlignment="Center" Style="{StaticResource TextBlockLargeBold}" FontSize="40"/>
+
+            <hc:StepBar Name="guideStepBar" StepIndex="{Binding Index}" Margin="0,30,0,0">
+                <hc:StepBarItem Content="添加FLAG提交配置"/>
+                <hc:StepBarItem Content="添加请求配置并绑定FLAG提交配置"/>
+                <hc:StepBarItem Content="开始攻击"/>
+                <hc:StepBarItem Content="上台领奖"/>
+            </hc:StepBar>
+        </StackPanel>
+
+        <hc:Shield Subject="Github" Status="YangYuXing" Margin="10" Color="#69207C" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="Hand" Click="Shield_Click"/>
+
     </Grid>
+   
 </Page>

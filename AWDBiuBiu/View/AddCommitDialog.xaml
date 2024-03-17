@@ -70,32 +70,16 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Margin="8,0,0,0" Text="POST设置" VerticalAlignment="Center"/>
-                        <ComboBox Name="postModeComboBox" Grid.Column="1" SelectedItem="{Binding _PostMode}" ItemsSource="{Binding Source={StaticResource PostModeProvider}}" Margin="2,0,0,0" hc:InfoElement.Title="编码类型" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" Style="{StaticResource ComboBoxExtend}"/>
+                        <ComboBox Name="postModeComboBox" Grid.Column="1" SelectedItem="{Binding _FlagPostMode}" ItemsSource="{Binding Source={StaticResource FlagPostModeProvider}}" Margin="2,0,0,0" hc:InfoElement.Title="编码类型" hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left" Style="{StaticResource ComboBoxExtend}"/>
                     </Grid>
                     <hc:Divider Grid.Row="1" Margin="0,5"/>
 
                     <TextBox Name="postTextBox" Grid.Row="2" Margin="0,5,0,0" Text="{Binding Param,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="键值对参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}"
-              Visibility="{Binding _PostMode,Converter={StaticResource Enum2VisibilityReConverter},ConverterParameter={x:Static resource:PostMode.JSON}}"/>
+              Visibility="{Binding _FlagPostMode,Converter={StaticResource Enum2VisibilityReConverter},ConverterParameter={x:Static resource:FlagPostMode.JSON}}"/>
 
                     <TextBox Name="postJsonTextBox" Grid.Row="2" Margin="0,5,0,0" Text="{Binding ParamJson,Mode=TwoWay}" hc:InfoElement.TitleWidth="80" hc:InfoElement.TitlePlacement="Top" Height="80" hc:InfoElement.Title="JSON参数" VerticalContentAlignment="Top" Padding="8" TextWrapping="Wrap" Style="{StaticResource TextBoxExtend}" AcceptsReturn="True"
-              Visibility="{Binding _PostMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:PostMode.JSON}}"/>
-
-                    <Grid  Grid.Row="3" Visibility="{Binding _PostMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:PostMode.FormData}}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="1" Margin="0,5,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Name="postFileArgTextBox" Text="{Binding FileParam,Mode=TwoWay}" Margin="0,0,2,0" hc:InfoElement.Placeholder="FormData参数名"  Style="{StaticResource TextBoxExtend}"/>
-                            <TextBox Name="postFilePathTextBox" Text="{Binding FilePath,Mode=TwoWay}" Grid.Column="1" Margin="2,0,2,0" hc:InfoElement.Placeholder="FormData文件路径"  Style="{StaticResource TextBoxExtend}"/>
-                            <Button Content="浏览" Grid.Column="2" Margin="5,0,0,0" Command="{Binding PostFileSelectCommand}" />
-                        </Grid>
-                    </Grid>
+              Visibility="{Binding _FlagPostMode,Converter={StaticResource Enum2VisibilityConverter},ConverterParameter={x:Static resource:FlagPostMode.JSON}}"/>
+                    
                 </Grid>
             </Grid>
         </hc:Card>

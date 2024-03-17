@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AWDBiuBiu.ViewModel;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AWDBiuBiu.View
 {
@@ -20,9 +23,38 @@ namespace AWDBiuBiu.View
     /// </summary>
     public partial class MainPage : Page
     {
+        MainPageViewModel mainPageViewModel = new MainPageViewModel();
+
+        public DispatcherTimer stepBarTimer = new DispatcherTimer();
+
         public MainPage()
         {
             InitializeComponent();
+
+            page.DataContext = mainPageViewModel;
+
+            stepBarTimer.Tick -= stepBarTimerExpiredTasks;
+            stepBarTimer.Stop();
+            stepBarTimer.Tick += stepBarTimerExpiredTasks;
+            stepBarTimer.Interval = TimeSpan.FromSeconds(2);
+            stepBarTimer.Start();
+        }
+
+        private void stepBarTimerExpiredTasks(object sender, EventArgs e)
+        {
+            if (mainPageViewModel.Index < 3)
+            {
+                mainPageViewModel.Index++;
+            }
+            else
+            {
+                stepBarTimer.Stop();
+            }
+        }
+
+        private void Shield_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://github.com/yyx290799684/AWDBiuBiu"));
         }
     }
 }

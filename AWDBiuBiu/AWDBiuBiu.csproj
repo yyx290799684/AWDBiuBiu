@@ -205,6 +205,7 @@
     <Compile Include="ViewModel\CommitViewModel.cs" />
     <Compile Include="ViewModel\DrawerListViewModel.cs" />
     <Compile Include="ViewModel\HttpBaseViewModel.cs" />
+    <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="View\AddCommitDialog.xaml.cs">
       <DependentUpon>AddCommitDialog.xaml</DependentUpon>
     </Compile>
