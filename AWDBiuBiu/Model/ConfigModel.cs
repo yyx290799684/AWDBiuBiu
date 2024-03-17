@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace AWDBiuBiu.Model
@@ -80,12 +81,21 @@ namespace AWDBiuBiu.Model
 
         private void AddRequest()
         {
-            AddRequestDialog addRequestDialog = new AddRequestDialog();
-            if (addRequestDialog.ShowDialog() == true)
+            if (MainWindow.configModel.CommitConfigModel.CommitList.Count == 0)
             {
-                var request = addRequestDialog._requestViewModel;
-                RequestList.Add(request);
+                MessageBox.Show("请先前往提交管理增加FLAG提交项");
             }
+            else
+            {
+                AddRequestDialog addRequestDialog = new AddRequestDialog();
+                if (addRequestDialog.ShowDialog() == true)
+                {
+                    var request = addRequestDialog._requestViewModel;
+                    RequestList.Add(request);
+                }
+            }
+
+
         }
     }
 
