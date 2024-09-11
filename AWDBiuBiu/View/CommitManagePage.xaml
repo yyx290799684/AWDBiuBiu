@@ -71,14 +71,6 @@
     </Page.Resources>
 
     <Grid DataContext="{Binding CommitConfigModel}" Margin="5" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-
         <hc:Card Background="#F2F2F2" Effect="{StaticResource EffectShadow2}">
             <hc:Card.Header >
                 <Grid Margin="10">
